@@ -1,25 +1,39 @@
 # Agently Mail Watcher
 
-在本机轮询 [Agently Mail](https://github.com/Tencent/AgentlyMail) 收件箱：当**指定发件人**发来**未读邮件**时，自动调用 **Cursor Agent CLI** 在本地仓库执行任务，并可向指定地址发送总结邮件。
+> **发封邮件，Agent 在本地仓库里替你干活。**
 
-- 纯 **Python 3.10+** 标准库，无需 `pip install`
-- 不依赖云端 Cursor Automation
-- Windows 后台使用 `pythonw`，子进程隐藏控制台窗口
-- 运行输出仅写 **日志文件**，无桌面通知
+把 [Agently Mail](https://github.com/Tencent/AgentlyMail) 收件箱变成 Cursor Agent 的远程触发器：白名单发件人的未读邮件 → 本机 Agent 自动执行 → 可选回信总结。手机发指令、电脑跑任务，全程在你自己的机器上完成。
+
+| 环节 | 说明 |
+|------|------|
+| 📬 **触发** | 向你的 `@agent.qq.com` 发一封未读邮件 |
+| 🤖 **执行** | 本机 Cursor Agent CLI 在指定仓库里跑任务 |
+| 📤 **反馈** | 可选：向 `replyTo` 发送 `[自动反馈]` 总结邮件 |
+
+**为什么选它？** 纯 Python 标准库、零 pip 依赖；不绑云端 Cursor Automation；Windows 后台静默运行（`pythonw` + 隐藏子进程控制台）；输出只写日志，不弹桌面通知。
 
 ## 架构
 
-```
-trusted-sender@example.com ──发信──► your-alias@agent.qq.com（Agently 收件箱）
-                                              │
-                                              ▼ 每 N 秒（watcher.py）
-                                    jobs/pending/*.json
-                                              │
-                                              ▼ 每 M 秒（processor.py）
-                                    本机 agent --print --model auto
-                                              │
-                                              ▼ 可选
-                                    总结邮件 ──► replyTo
+```mermaid
+flowchart TB
+    subgraph trigger["📬 邮件触发"]
+        A["trusted-sender@example.com"]
+        B["your-alias@agent.qq.com<br/>Agently 收件箱"]
+        A -->|"发信"| B
+    end
+
+    subgraph watcher["👁 watcher.py（每 N 秒）"]
+        C["jobs/pending/*.json"]
+    end
+
+    subgraph processor["⚙ processor.py（每 M 秒）"]
+        D["本机 agent --print --model auto"]
+        E["总结邮件 → replyTo"]
+    end
+
+    B --> C
+    C --> D
+    D -.->|"可选"| E
 ```
 
 | 组件 | 作用 |
