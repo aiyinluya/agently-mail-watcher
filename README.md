@@ -1,5 +1,9 @@
 # Agently Mail Watcher
 
+<p align="center">
+  <img src="assets/cover.png" alt="Agently Mail Watcher — 发封邮件，Agent 在本地仓库里替你干活" width="100%">
+</p>
+
 > **发封邮件，Agent 在本地仓库里替你干活。**
 
 把 [Agently Mail](https://github.com/Tencent/AgentlyMail) 收件箱变成 Cursor Agent 的远程触发器：白名单发件人的未读邮件 → 本机 Agent 自动执行 → 可选回信总结。手机发指令、电脑跑任务，全程在你自己的机器上完成。
