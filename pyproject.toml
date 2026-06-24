@@ -1,0 +1,10 @@
+requires-python = ">=3.10"
+
+[project]
+name = "agently-mail-watcher"
+version = "2.0.0"
+description = "Poll Agently Mail and run local Cursor Agent on new mail (stdlib only)"
+
+[project.scripts]
+amw-watcher = "watcher:main"
+amw-processor = "processor:main"

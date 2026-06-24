@@ -1,0 +1,8 @@
+jobs/
+logs/
+*.pid
+config.json
+state.json
+操作说明.md
+__pycache__/
+*.pyc
